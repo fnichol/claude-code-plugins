@@ -1,0 +1,11 @@
+{
+  "name": "obsidian",
+  "description": "Manage brainstorming and planning documents in Obsidian vault with structured conventions",
+  "version": "1.0.0",
+  "author": {
+    "name": "Fletcher Nichol",
+    "email": "fnichol@nichol.ca"
+  },
+  "license": "MIT",
+  "keywords": ["obsidian", "documentation", "brainstorming", "planning", "knowledge-management"]
+}

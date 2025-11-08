@@ -6,5 +6,12 @@
   },
   "description": "Personal collection of Claude Code plugins",
   "pluginRoot": "./plugins",
-  "plugins": []
+  "plugins": [
+    {
+      "name": "obsidian",
+      "source": "./obsidian",
+      "description": "Obsidian vault integration for Claude Code",
+      "version": "1.0.0"
+    }
+  ]
 }
