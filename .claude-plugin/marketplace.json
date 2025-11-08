@@ -5,11 +5,10 @@
     "email": "fnichol@nichol.ca"
   },
   "description": "Personal collection of Claude Code plugins",
-  "pluginRoot": "./plugins",
   "plugins": [
     {
       "name": "obsidian",
-      "source": "./obsidian",
+      "source": "./plugins/obsidian",
       "description": "Obsidian vault integration for Claude Code",
       "version": "1.0.0"
     }
