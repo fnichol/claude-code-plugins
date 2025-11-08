@@ -1,0 +1,10 @@
+{
+  "name": "fnichol-plugins",
+  "owner": {
+    "name": "Fletcher Nichol",
+    "email": "fnichol@nichol.ca"
+  },
+  "description": "Personal collection of Claude Code plugins",
+  "pluginRoot": "./plugins",
+  "plugins": []
+}
