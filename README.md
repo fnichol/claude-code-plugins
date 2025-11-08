@@ -18,7 +18,7 @@ Then browse and install plugins:
 
 ## Available Plugins
 
-Currently empty. Plugins will be listed here as they are added.
+- **obsidian** - Obsidian vault integration for Claude Code
 
 ## Development
 
