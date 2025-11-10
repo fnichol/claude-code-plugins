@@ -16,7 +16,16 @@ This plugin provides a skill for Claude Code to create and manage structured doc
 
 ## Configuration
 
-The plugin reads configuration from `~/.claude/CLAUDE.md`. See the Obsidian Vault Integration section.
+After installing this plugin, add the following to your `~/.claude/CLAUDE.md`:
+
+```markdown
+@~/.claude/plugins/marketplaces/fnichol-plugins/plugins/obsidian/CLAUDE.md
+```
+
+Then customize the vault location and directory structure to match your setup. You can edit the imported file directly at:
+`~/.claude/plugins/marketplaces/fnichol-plugins/plugins/obsidian/CLAUDE.md`
+
+Or copy the configuration into your global `~/.claude/CLAUDE.md` and customize it there.
 
 ## Usage
 
