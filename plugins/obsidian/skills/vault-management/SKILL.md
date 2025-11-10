@@ -1,6 +1,6 @@
 ---
 name: vault-management
-description: Use when user says "save this", "create project", "promote from inbox", or organizing Obsidian documentation - manages frontmatter (project/status/type/created), file naming (YYYY-MM-DD-name.md), wikilinks, and project structure in ~/Sync/Obsidian/fnichol
+description: Use when user says "save this", "create project", "promote from inbox", or organizing Obsidian documentation - manages frontmatter (project/status/type/created), file naming (YYYY-MM-DD-name.md), wikilinks, and project structure in user's Obsidian vault
 ---
 
 # Obsidian Vault Management
@@ -9,7 +9,12 @@ description: Use when user says "save this", "create project", "promote from inb
 
 Direct file system management for Obsidian project documentation. Enforces YYYY-MM-DD-name.md naming, generates frontmatter, maintains wikilinks, organizes into projects/<name>/ and _inbox/.
 
-**Vault:** `~/Sync/Obsidian/fnichol`
+## Configuration
+
+**Vault path:** Look for "Primary vault:" in conversation context (from CLAUDE.md).
+- Use the most recent occurrence if multiple are present (user override takes precedence)
+- Default: `~/Obsidian/vault` if not specified
+- Expand `~` to user's home directory before using
 
 ## When to Use
 
@@ -68,22 +73,24 @@ created: YYYY-MM-DD      # File creation date
 
 **Trigger:** "save this as a new project"
 
-1. Ask for project name → validate (lowercase, hyphens, no spaces)
-2. Create `~/Sync/Obsidian/fnichol/projects/<project-name>/`
-3. Infer doc type from conversation (brainstorming → brainstorm, planning → plan)
-4. Generate filename: `YYYY-MM-DD-<type>.md`
-5. Write frontmatter with `status: planning`
-6. Add empty `## Related Documents` section
-7. Confirm: "Created projects/<name>/YYYY-MM-DD-<type>.md"
+1. Determine vault path from conversation context (see Configuration)
+2. Ask for project name → validate (lowercase, hyphens, no spaces)
+3. Create `<vault-path>/projects/<project-name>/`
+4. Infer doc type from conversation (brainstorming → brainstorm, planning → plan)
+5. Generate filename: `YYYY-MM-DD-<type>.md`
+6. Write frontmatter with `status: planning`
+7. Add empty `## Related Documents` section
+8. Confirm: "Created projects/<name>/YYYY-MM-DD-<type>.md"
 
 ### Save to Inbox
 
 **Trigger:** "save to inbox" / "quick idea"
 
-1. Create in `~/Sync/Obsidian/fnichol/projects/_inbox/`
-2. Use descriptive filename from content
-3. Frontmatter: `project: inbox`, `status: planning`, `type: notes`
-4. Confirm creation
+1. Determine vault path from conversation context (see Configuration)
+2. Create in `<vault-path>/projects/_inbox/`
+3. Use descriptive filename from content
+4. Frontmatter: `project: inbox`, `status: planning`, `type: notes`
+5. Confirm creation
 
 ### Add Document to Existing Project
 
@@ -134,10 +141,11 @@ created: YYYY-MM-DD      # File creation date
 
 **Trigger:** "list projects" / "show me all projects"
 
-1. Read `~/Sync/Obsidian/fnichol/projects/` (skip `_inbox/`)
-2. For each project, read one doc to get status
-3. Sort by status: active → planning → paused → completed → archived
-4. Show count of documents per project
+1. Determine vault path from conversation context (see Configuration)
+2. Read `<vault-path>/projects/` (skip `_inbox/`)
+3. For each project, read one doc to get status
+4. Sort by status: active → planning → paused → completed → archived
+5. Show count of documents per project
 
 **Output:**
 ```
@@ -191,11 +199,13 @@ obsidian-integration (status: active):
 
 **Directory:**
 ```
-~/Sync/Obsidian/fnichol/projects/
+<vault-path>/projects/
   _inbox/                    # Quick captures
   project-name/              # One folder per project
     YYYY-MM-DD-desc.md
 ```
+
+**Note:** `<vault-path>` is determined from "Primary vault:" in conversation context (see Configuration section).
 
 **Naming rules:**
 - **Files:** `YYYY-MM-DD-descriptive-name.md` (lowercase, hyphens, concise)
@@ -244,7 +254,8 @@ obsidian-integration (status: active):
 | Project not found | Search partial matches → offer to create → list available |
 | Invalid frontmatter | Report issue → fix before proceeding |
 | File exists | Ask to update in-place or use different filename |
-| Permission denied | Report error → suggest checking vault path in CLAUDE.md |
+| Permission denied | Report error → suggest checking vault path in user's ~/.claude/CLAUDE.md |
+| Vault path not found | Check for "Primary vault:" in conversation context → use default ~/Obsidian/vault if not found |
 | Wrong date in filename | Preserve creation date (filename) when updating → only change frontmatter `updated` |
 
 ## Example

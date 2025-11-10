@@ -1,11 +1,17 @@
 # Obsidian Vault Integration
 
 ## Vault Location
-Primary vault: `~/Sync/Obsidian/fnichol`
+Primary vault: `~/Obsidian/vault`
+
+**To customize:** Add the following to your `~/.claude/CLAUDE.md` after the plugin reference:
+```markdown
+# Obsidian Vault Path Override
+Primary vault: `~/your/actual/vault/path`
+```
 
 ## Directory Structure
 ```
-~/Sync/Obsidian/fnichol/projects/
+~/Obsidian/vault/projects/
   _inbox/                    # Quick captures
   <project-name>/            # One folder per project
     YYYY-MM-DD-desc.md

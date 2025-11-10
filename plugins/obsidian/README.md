@@ -22,26 +22,26 @@ This plugin provides the `vault-management` skill for Claude Code to create and 
 
 1. Install this plugin via Claude Code plugin marketplace
 
-2. Add the following to your `~/.claude/CLAUDE.md`:
+2. Add to your `~/.claude/CLAUDE.md`:
    ```markdown
    # Obsidian Vault Integration
    @~/.claude/plugins/marketplaces/fnichol-plugins/plugins/obsidian/CLAUDE.md
+
+   # Obsidian Vault Path Override (customize this)
+   Primary vault: `~/Sync/Obsidian/fnichol`
    ```
 
-3. Customize your vault location by editing:
-   ```bash
-   ~/.claude/plugins/marketplaces/fnichol-plugins/plugins/obsidian/CLAUDE.md
-   ```
-
-   Change the vault path to match your setup:
-   ```markdown
-   ## Vault Location
-   Primary vault: `~/Sync/Obsidian/fnichol`  # ← Edit this
-   ```
+   **Default vault path:** `~/Obsidian/vault` (if you don't add the override)
 
 **What gets loaded:**
 - **CLAUDE.md**: Vault location and basic structure (loads in every conversation - kept minimal for token efficiency)
 - **vault-management skill**: Full operations, conventions, and validation rules (loads only when you use vault commands)
+
+**Why this approach:**
+- Plugin files stay generic and shareable
+- Your personal vault path lives only in your `~/.claude/CLAUDE.md`
+- Easy to customize without editing plugin files
+- Works across plugin updates
 
 ## Usage
 
@@ -66,13 +66,15 @@ The `vault-management` skill activates automatically when you use trigger phrase
 ## Directory Structure
 
 ```
-~/Sync/Obsidian/fnichol/projects/
+<your-vault-path>/projects/
   _inbox/                    # Quick captures
   project-name/              # One folder per project
     YYYY-MM-DD-desc.md       # Timestamped documents
 ```
 
 **File naming:** `YYYY-MM-DD-descriptive-name.md` (lowercase, hyphens)
+
+**Note:** Replace `<your-vault-path>` with the path configured in your `~/.claude/CLAUDE.md`
 
 ## Document Metadata
 
