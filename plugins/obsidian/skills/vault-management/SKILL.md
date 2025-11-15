@@ -143,6 +143,107 @@ When creating document:
 - Linking: Relative markdown links `[text](./file.md)`
 - Updates: Rely on git history (no frontmatter dates)
 
+## Local Document Operations
+
+**When `Local docs:` configured, enable operations in local directory:**
+
+### Style Adaptation
+
+**Detect existing project style (default behavior):**
+1. Read 1-3 existing documents from local docs directory
+2. Analyze:
+   - Filename patterns (kebab-case, snake_case, PascalCase, date-prefixed, etc.)
+   - Heading structure (ATX vs Setext, title format)
+   - Frontmatter presence and format
+   - Overall tone and structure
+3. Match detected style in new documents
+
+**Override with standard template:**
+- If `Documentation style: standard` in CLAUDE.local.md
+- Use consistent template regardless of existing docs
+
+**Fallback to standard:**
+- If local docs empty or unreadable
+- Warn: "Couldn't detect local style, using standard template"
+
+### GitHub Remote Detection
+
+**Purpose:** Create portable links from vault docs to local docs
+
+**Detection process:**
+1. Parse `.git/config` in working directory
+2. Look for `[remote "..."]` sections with `url` containing `github.com`
+3. Extract: `org/repo` from URL patterns:
+   - `https://github.com/org/repo.git`
+   - `git@github.com:org/repo.git`
+4. Determine default branch:
+   - Check `.git/refs/remotes/origin/HEAD`
+   - Common: `main` or `master`
+
+**Link construction:**
+`https://github.com/<org>/<repo>/blob/<branch>/docs/<filename>.md`
+
+**When to skip linking:**
+- Non-GitHub remote (GitLab, Bitbucket, self-hosted)
+- No remote configured
+- Cannot parse remote URL
+
+**Multiple remotes:**
+- Prefer `origin` if present
+- Otherwise use first GitHub remote found
+
+### Creating Local Documents
+
+**Process for local doc creation:**
+
+**Step 1:** Determine filename
+- Adapt to existing style if detected
+- Examples: `architecture.md`, `api-design.md`, `database-schema.md`
+
+**Step 2:** Detect related vault docs
+- Search vault index for related documents
+- Match by project name, keywords, document type
+
+**Step 3:** Create document
+- Apply adapted style or standard template
+- Add optional frontmatter if existing docs use it
+- Include content based on user's request
+
+**Step 4:** Add Related Documents section
+- Link to related local docs: `[Architecture](./architecture.md)`
+- Link to related vault docs via GitHub URL (if detected):
+  ```markdown
+  ## Related Documents
+
+  - [API Design](./api-design.md) - REST API specification
+  - [Initial Brainstorm](https://github.com/org/repo/blob/main/docs/brainstorm.md) - Early ideas
+  ```
+
+**Step 5:** Confirm creation
+- "Created `docs/design.md` matching project style"
+- List any links added
+
+### Updating Local Documents
+
+**Process:**
+1. Locate document in local docs directory
+2. Read current contents
+3. Apply requested changes
+4. Do not modify filename (preserve name)
+5. Do not add frontmatter dates (rely on git)
+6. Confirm changes: "Updated `docs/architecture.md`"
+
+### Searching Local Documents
+
+**Combine with vault search:**
+- "show me design docs" → search vault index + scan local docs
+- Report both locations: "Found in vault: ..., Found in docs/: ..."
+- Let user disambiguate if multiple matches
+
+**List all docs:**
+- Combine vault index with local directory scan
+- Show location for each: `[vault]` or `[local]`
+
 ## When to Use
 
 **User triggers:**
