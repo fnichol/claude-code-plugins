@@ -12,6 +12,10 @@ This plugin provides the `vault-management` skill for Claude Code to create and 
 
 ## Features
 
+- **Project Linking**: Automatic session awareness via `CLAUDE.local.md` configuration
+- **Smart Routing**: Implementation docs to local, exploratory docs to vault
+- **Style Adaptation**: Local docs match existing project conventions automatically
+- **GitHub Linking**: Portable cross-location links via GitHub URLs
 - **Project Organization**: Structured project folders with consistent naming (`YYYY-MM-DD-name.md`)
 - **Metadata-Driven**: Frontmatter (project, status, type, created) for filtering and discovery
 - **Inbox Workflow**: Quick capture with promotion to full projects
@@ -45,21 +49,52 @@ This plugin provides the `vault-management` skill for Claude Code to create and 
 
 ## Usage
 
-The `vault-management` skill activates automatically when you use trigger phrases:
+The `vault-management` skill activates automatically when you use trigger phrases OR when you start a session in a directory with `CLAUDE.local.md` containing an Obsidian project reference.
 
-**Creating & organizing:**
+### Project Linking (Automatic)
+
+**Enable by creating `CLAUDE.local.md` in your project directory:**
+
+```markdown
+# Obsidian Project
+Vault project: `my-project-name`
+```
+
+**Benefits:**
+- Silent index loading at session start
+- Claude knows all vault docs immediately
+- Smart routing for document operations
+
+**Optional: Add local docs support:**
+
+```markdown
+# Obsidian Project
+Vault project: `my-project-name`
+Local docs: `./docs`
+```
+
+**Smart routing:**
+- Implementation docs (design, plan) → local `docs/`
+- Exploratory docs (brainstorm, notes) → vault
+- Adapts to existing local doc style automatically
+
+**Note:** Add `CLAUDE.local.md` to `.gitignore` - it's personal configuration.
+
+### Manual Operations
+
+Creating & organizing:
 - "Save this as a new project"
 - "Save to inbox" / "quick idea"
 - "Create a [design/plan/brainstorm] doc for [project-name]"
 - "Update [doc] in [project]"
 
-**Managing projects:**
+Managing projects:
 - "Promote that inbox note to a project"
 - "List projects" / "show me all projects"
 - "What's in [project]"
 - "Mark [project] as active"
 
-**Validation:**
+Validation:
 - "Check [project] frontmatter"
 - "Validate frontmatter"
 
