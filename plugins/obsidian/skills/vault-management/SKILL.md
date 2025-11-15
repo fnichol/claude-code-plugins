@@ -497,11 +497,75 @@ Local documents:
 - [ ] File exists → read current contents
 - [ ] Preserve creation date in filename (only update frontmatter)
 
+## Error Handling for Project Linking
+
+### Configuration Errors
+
+**CLAUDE.local.md missing vault project:**
+- If CLAUDE.local.md exists but no `Vault project:` field
+- Behavior: Treat as no project linking configured
+- No warning needed
+
+**Invalid project name format:**
+- Project name contains spaces or uppercase
+- Suggest: "Project name should be lowercase with hyphens: `my-project-name`"
+
+**Both CLAUDE.md and CLAUDE.local.md specify project:**
+- CLAUDE.local.md takes precedence (project-specific override)
+- No warning needed
+
+### Startup Errors
+
+**Vault path doesn't exist:**
+- Show: "Warning: Vault path `<path>` not found. Check 'Primary vault:' in ~/.claude/CLAUDE.md"
+- Continue session (non-blocking)
+
+**Vault project doesn't exist:**
+- Show: "Note: Vault project `<name>` not found - will create on first save"
+- Continue session (non-blocking)
+- Create on first document save
+
+**Permission denied reading vault:**
+- Show: "Error: Cannot read vault project `<name>` at `<path>` - permission denied"
+- Continue session but document operations will fail
+- Suggest: Check file permissions
+
+**Local docs directory missing:**
+- If `Local docs: ./docs` configured but doesn't exist
+- Show: "Warning: Local docs directory `./docs` not found. Create it or update CLAUDE.local.md"
+- Continue session (vault still works)
+
+### Operation Errors
+
+**Ambiguous document reference:**
+- "show me the design doc" matches both vault and local
+- Show both with locations: "Found 2 matches: [vault] 2025-11-15-design.md, [local] architecture.md"
+- Ask: "Which document? Specify 'vault design' or 'local design'"
+
+**Cannot write to location:**
+- Vault write fails: "Error: Cannot write to vault at `<path>` - permission denied. Try local docs instead?"
+- Local write fails: "Error: Cannot write to `<path>` - permission denied. Try vault instead?"
+
+**GitHub remote detection fails:**
+- Non-GitHub remote: No cross-linking, no warning
+- No remote: No cross-linking, no warning
+- Multiple GitHub remotes: Use `origin` or first found
+
+**Style adaptation fails:**
+- Local docs empty: "Note: No existing docs found in `./docs`, using standard template"
+- Cannot read local docs: "Warning: Cannot read local docs for style detection, using standard template"
+
 ## Common Mistakes
 
 | Problem | Solution |
 |---------|----------|
 | Project not found | Search partial matches → offer to create → list available |
+| CLAUDE.local.md not detected | Verify file exists in working directory (not subdirectory) |
+| Local docs path incorrect | Check path is relative to working directory (e.g., `./docs` not `~/docs`) |
+| Vault project name mismatch | Verify CLAUDE.local.md project name matches vault folder name |
+| Both locations have same doc | Ask user to disambiguate: "vault design" or "local design" |
+| GitHub URLs not working | Check remote is github.com (not GitLab, Bitbucket) |
+| Style detection wrong | Override with `Documentation style: standard` in CLAUDE.local.md |
 | Invalid frontmatter | Report issue → fix before proceeding |
 | File exists | Ask to update in-place or use different filename |
 | Permission denied | Report error → suggest checking vault path in user's ~/.claude/CLAUDE.md |
