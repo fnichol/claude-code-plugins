@@ -246,15 +246,26 @@ When creating document:
 
 ## When to Use
 
+**Automatic activation:**
+- Session starts in directory with CLAUDE.local.md containing `Vault project:` field
+- Skill loads silently, index loaded, dual location awareness enabled
+
 **User triggers:**
 - "Save this" / "create project" / "save to inbox"
 - "Create a [design/plan/brainstorm] doc for [project]"
 - "Promote that note to a project"
 - "Update [doc] in [project]"
 - "List projects" / "show me what's in [project]"
+- "Show me all project docs" (combines vault + local)
 
 **Use this skill for:** Project documentation, design docs, brainstorms, plans, retrospectives
 **Don't use for:** Code documentation (use project CLAUDE.md), one-off notes outside vault
+
+**Project linking benefits:**
+- Automatic awareness of vault documentation at session start
+- Smart routing between vault and local docs based on document type
+- Unified view of all project documentation regardless of location
+- Portable GitHub links between vault and local docs
 
 ## Quick Reference
 
