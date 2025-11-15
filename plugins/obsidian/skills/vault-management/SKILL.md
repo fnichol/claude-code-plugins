@@ -260,14 +260,18 @@ When creating document:
 
 | Operation | Command Pattern | Result |
 |-----------|----------------|--------|
-| New project | "save as new project" | `projects/<name>/YYYY-MM-DD-<type>.md` |
+| Link project | Add to CLAUDE.local.md | Silent index load + dual location awareness |
+| New project | "save as new project" | `projects/<name>/YYYY-MM-DD-<type>.md` or `docs/<type>.md` |
 | Save inbox | "save to inbox" | `projects/_inbox/YYYY-MM-DD-<desc>.md` |
-| Add to project | "create [type] doc for [project]" | New doc + wikilinks to related |
-| Update doc | "update [doc] in [project]" | Edit + `updated: YYYY-MM-DD` frontmatter |
+| Add to project | "create [type] doc for [project]" | New doc + location resolution + links |
+| Add design (local) | "create design doc" + Local docs | `docs/design.md` (adapted style) |
+| Add brainstorm (vault) | "save brainstorm" + Local docs | `projects/<name>/YYYY-MM-DD-brainstorm.md` (vault) |
+| Update doc | "update [doc] in [project]" | Edit + `updated: YYYY-MM-DD` (vault) or git history (local) |
 | Promote inbox | "promote to project" | Move + update frontmatter + rename |
-| List projects | "list projects" | Show all with status (skip _inbox) |
-| Show contents | "what's in [project]" | List docs chronologically |
-| Update status | "mark [project] as active" | Update all doc frontmatter |
+| List projects | "list projects" | Show all with status + doc counts (vault + local) |
+| Show contents | "what's in [project]" | List docs by location chronologically |
+| Show all docs | "show me all project docs" | Combined vault + local listing |
+| Update status | "mark [project] as active" | Update all doc frontmatter (vault only) |
 | Validate | "check frontmatter" | Report missing/invalid fields |
 
 **Conventions:**
