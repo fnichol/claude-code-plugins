@@ -16,6 +16,34 @@ Direct file system management for Obsidian project documentation. Enforces YYYY-
 - Default: `~/Obsidian/vault` if not specified
 - Expand `~` to user's home directory before using
 
+## Project Linking Configuration
+
+**CLAUDE.local.md detection:** Check for `CLAUDE.local.md` in working directory at session start.
+
+**Parse configuration fields:**
+- `Vault project: \`project-name\`` - Links working directory to vault project
+- `Local docs: ./path` - Optional local documentation directory
+- `Documentation style: standard` - Optional style override
+
+**Configuration precedence:**
+- CLAUDE.local.md overrides for project-specific settings
+- ~/.claude/CLAUDE.md for vault path (Primary vault:)
+- Defaults: vault path `~/Obsidian/vault`, no local docs
+
+**Example CLAUDE.local.md:**
+```markdown
+# Obsidian Project
+Vault project: `my-project-name`
+Local docs: `./docs`
+Documentation style: standard
+```
+
+**Session context:**
+Store parsed values in memory for the session:
+- `project_name` - from Vault project field
+- `local_docs_path` - from Local docs field (optional)
+- `doc_style` - from Documentation style field (optional, default: adapt)
+
 ## When to Use
 
 **User triggers:**
