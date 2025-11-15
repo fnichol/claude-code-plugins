@@ -601,3 +601,128 @@ Local documents:
 2. Create `projects/git-worktrees/`
 3. Move and rename → `2025-11-07-initial-brainstorm.md`
 4. Update frontmatter: `project: git-worktrees`, add `promoted: 2025-11-08`
+
+## Project Linking Workflow Examples
+
+### Example 1: Vault-Only Configuration
+
+**Setup CLAUDE.local.md:**
+```markdown
+# Obsidian Project
+Vault project: `obsidian-integration`
+```
+
+**Session Start:**
+- Claude silently loads index from vault project
+- No output unless warnings
+
+**User:** "Create a design doc"
+**Claude:** Creates `~/Obsidian/vault/projects/obsidian-integration/2025-11-15-design.md` with frontmatter
+
+**User:** "Save this brainstorm"
+**Claude:** Creates `~/Obsidian/vault/projects/obsidian-integration/2025-11-15-brainstorm.md`
+
+**Result:** All docs in vault, full frontmatter tracking
+
+---
+
+### Example 2: Dual Location Configuration
+
+**Setup CLAUDE.local.md:**
+```markdown
+# Obsidian Project
+Vault project: `api-refactoring`
+Local docs: `./docs`
+```
+
+**Session Start:**
+- Claude silently loads vault index
+- Verifies `./docs` exists
+- No output unless warnings
+
+**User:** "Create a design doc"
+**Claude:**
+1. Detects type: design (implementation doc)
+2. Resolves to: local docs
+3. Reads existing docs in `./docs` to detect style
+4. Creates `./docs/architecture.md` matching detected style
+
+**User:** "Save this brainstorm"
+**Claude:**
+1. Detects type: brainstorm (exploratory doc)
+2. Resolves to: vault
+3. Creates `~/Obsidian/vault/projects/api-refactoring/2025-11-15-brainstorm.md`
+
+**User:** "List all project docs"
+**Claude:**
+```
+api-refactoring (status: active):
+
+Vault documents:
+- 2025-11-07-initial-brainstorm.md (brainstorm)
+- 2025-11-10-retrospective.md (retrospective)
+
+Local documents:
+- architecture.md (design)
+- api-design.md (design)
+```
+
+**Result:** Implementation docs version-controlled with code, exploratory docs in vault
+
+---
+
+### Example 3: Cross-Location Linking
+
+**Setup:**
+- CLAUDE.local.md: `Vault project: my-app`, `Local docs: ./docs`
+- Git remote: `github.com/org/my-app`
+
+**User:** "Create a design doc that references the initial brainstorm"
+**Claude:**
+1. Creates `./docs/architecture.md` (local, implementation doc)
+2. Searches vault for related docs
+3. Finds `2025-11-07-initial-brainstorm.md` in vault
+4. Detects GitHub remote
+5. Adds to design doc:
+```markdown
+## Related Documents
+
+- [Initial Brainstorm](https://github.com/org/my-app/blob/main/docs/2025-11-07-initial-brainstorm.md) - Early exploration
+```
+
+**User:** In vault, "update the brainstorm to link to the design doc"
+**Claude:**
+1. Reads vault brainstorm
+2. Detects GitHub remote
+3. Adds to brainstorm:
+```markdown
+## Related Documents
+
+- [Architecture Design](https://github.com/org/my-app/blob/main/docs/architecture.md) - Technical design
+```
+
+**Result:** Portable bidirectional links that work across machines
+
+---
+
+### Example 4: Style Adaptation
+
+**Setup:**
+- CLAUDE.local.md: `Vault project: legacy-app`, `Local docs: ./documentation`
+- Existing docs use PascalCase: `ApiDesign.md`, `DatabaseSchema.md`
+
+**User:** "Create a design doc for the authentication system"
+**Claude:**
+1. Reads existing docs to detect style
+2. Detects: PascalCase filenames, specific heading structure
+3. Creates `./documentation/AuthenticationDesign.md` matching detected pattern
+
+**User:** Later decides to standardize: adds `Documentation style: standard` to CLAUDE.local.md
+
+**User:** "Create a deployment plan"
+**Claude:**
+1. Checks Documentation style setting
+2. Ignores existing PascalCase pattern
+3. Creates `./documentation/deployment-plan.md` using standard kebab-case
+
+**Result:** Can adapt to existing conventions or enforce standards
