@@ -44,6 +44,48 @@ Store parsed values in memory for the session:
 - `local_docs_path` - from Local docs field (optional)
 - `doc_style` - from Documentation style field (optional, default: adapt)
 
+## Startup Behavior
+
+**When CLAUDE.local.md contains `Vault project:` reference:**
+
+### 1. Silent Index Loading
+
+**Trigger:** Session starts in directory with CLAUDE.local.md containing Vault project field
+
+**Process:**
+1. Parse CLAUDE.local.md for `Vault project: \`name\``
+2. Determine vault path from "Primary vault:" in context (see Configuration)
+3. Expand `~` to home directory in vault path
+4. Construct project path: `<vault-path>/projects/<project-name>/`
+5. Read all `.md` files in project folder
+6. Extract from each file's frontmatter:
+   - filename (for reference)
+   - `type:` field (brainstorm, design, plan, notes, retrospective)
+   - `status:` field (planning, active, paused, completed, archived)
+7. Store index in memory as session context
+
+**Silent Success:**
+- No output to user
+- Index available for search/list operations
+
+**Visible Warnings:**
+- Vault path doesn't exist: "Warning: Vault path `<path>` not found. Check Primary vault in ~/.claude/CLAUDE.md"
+- Project doesn't exist: "Note: Vault project `<name>` not found - will create on first save"
+- Permission error: "Error: Cannot read vault project `<name>` at `<path>` - permission denied"
+
+### 2. Local Docs Verification
+
+**If `Local docs:` configured:**
+1. Verify directory exists relative to working directory
+2. If not found: "Warning: Local docs directory `<path>` not found. Create it or update CLAUDE.local.md"
+3. Do not auto-create (respect project structure)
+
+**Session Ready:**
+After startup, Claude knows:
+- All vault documents (from index)
+- Local docs location (if configured)
+- Ready for document operations
+
 ## When to Use
 
 **User triggers:**
