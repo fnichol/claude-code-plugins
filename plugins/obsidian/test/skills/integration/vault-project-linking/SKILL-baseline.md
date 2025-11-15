@@ -1,9 +1,11 @@
 ---
-name: vault-management
+name: vault
 description: Use when user says "save this", "create project", "promote from inbox", or organizing Obsidian documentation - manages frontmatter (project/status/type/created), file naming (YYYY-MM-DD-name.md), wikilinks, and project structure in user's Obsidian vault
 ---
 
 # Obsidian Vault Management
+
+**Note:** This baseline represents the vault skill (formerly vault-management) before project linking features were split into a separate skill.
 
 ## Overview
 

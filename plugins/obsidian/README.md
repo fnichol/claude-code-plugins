@@ -4,14 +4,22 @@ Personal plugin for managing brainstorming and planning documents in an Obsidian
 
 ## Overview
 
-This plugin provides the `vault-management` skill for Claude Code to create and manage structured documentation in your Obsidian vault using direct file system access. No MCP servers or Obsidian plugins required.
+This plugin provides two skills for Claude Code to create and manage structured documentation in your Obsidian vault using direct file system access. No MCP servers or Obsidian plugins required.
+
+**Skills:**
+- **vault** - Core vault operations (creating projects, managing documents, frontmatter)
+- **project-linking** - Automatic session awareness linking working directories to vault projects
 
 **Architecture:**
 - **CLAUDE.md** - Minimal configuration (vault path, directory structure) loaded in every session
-- **SKILL.md** - Detailed operations and conventions loaded on-demand when managing vault
+- **Skills** - Detailed operations and conventions loaded on-demand when managing vault
 
 ## Features
 
+- **Project Linking**: Automatic session awareness via `CLAUDE.local.md` configuration
+- **Smart Routing**: Implementation docs to local, exploratory docs to vault
+- **Style Adaptation**: Local docs match existing project conventions automatically
+- **GitHub Linking**: Portable cross-location links via GitHub URLs
 - **Project Organization**: Structured project folders with consistent naming (`YYYY-MM-DD-name.md`)
 - **Metadata-Driven**: Frontmatter (project, status, type, created) for filtering and discovery
 - **Inbox Workflow**: Quick capture with promotion to full projects
@@ -35,7 +43,8 @@ This plugin provides the `vault-management` skill for Claude Code to create and 
 
 **What gets loaded:**
 - **CLAUDE.md**: Vault location and basic structure (loads in every conversation - kept minimal for token efficiency)
-- **vault-management skill**: Full operations, conventions, and validation rules (loads only when you use vault commands)
+- **vault skill**: Core vault operations, conventions, and validation rules (loads when creating/managing vault documents)
+- **project-linking skill**: Project awareness and dual-location routing (loads automatically when CLAUDE.local.md is present)
 
 **Why this approach:**
 - Plugin files stay generic and shareable
@@ -45,21 +54,52 @@ This plugin provides the `vault-management` skill for Claude Code to create and 
 
 ## Usage
 
-The `vault-management` skill activates automatically when you use trigger phrases:
+The vault skills activate automatically when you use trigger phrases OR when you start a session in a directory with `CLAUDE.local.md` containing an Obsidian project reference.
 
-**Creating & organizing:**
+### Project Linking (Automatic)
+
+**Enable by creating `CLAUDE.local.md` in your project directory:**
+
+```markdown
+# Obsidian Project
+Vault project: `my-project-name`
+```
+
+**Benefits:**
+- Silent index loading at session start
+- Claude knows all vault docs immediately
+- Smart routing for document operations
+
+**Optional: Add local docs support:**
+
+```markdown
+# Obsidian Project
+Vault project: `my-project-name`
+Local docs: `./docs`
+```
+
+**Smart routing:**
+- Implementation docs (design, plan) → local `docs/`
+- Exploratory docs (brainstorm, notes) → vault
+- Adapts to existing local doc style automatically
+
+**Note:** Add `CLAUDE.local.md` to `.gitignore` - it's personal configuration.
+
+### Manual Operations
+
+Creating & organizing:
 - "Save this as a new project"
 - "Save to inbox" / "quick idea"
 - "Create a [design/plan/brainstorm] doc for [project-name]"
 - "Update [doc] in [project]"
 
-**Managing projects:**
+Managing projects:
 - "Promote that inbox note to a project"
 - "List projects" / "show me all projects"
 - "What's in [project]"
 - "Mark [project] as active"
 
-**Validation:**
+Validation:
 - "Check [project] frontmatter"
 - "Validate frontmatter"
 
