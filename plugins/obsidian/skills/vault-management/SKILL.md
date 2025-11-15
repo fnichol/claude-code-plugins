@@ -86,6 +86,63 @@ After startup, Claude knows:
 - Local docs location (if configured)
 - Ready for document operations
 
+## Location Resolution
+
+**Determine target location for document operations:**
+
+### Resolution Algorithm
+
+```
+When creating document:
+  If user explicitly specifies location:
+    Use specified location
+  Else if Local docs configured:
+    If document type in [design, plan]:
+      → Local docs directory
+    Else:
+      → Vault project
+  Else:
+    → Vault project (default)
+```
+
+### Document Type Categories
+
+**Implementation docs** (go to local when Local docs configured):
+- `design` - Architecture and technical design
+- `plan` - Implementation tasks and roadmaps
+
+**Exploratory docs** (always go to vault):
+- `brainstorm` - Initial idea exploration
+- `notes` - Working notes and observations
+- `retrospective` - Post-completion reflections
+
+### Location Override Examples
+
+**Explicit overrides (user specifies location):**
+- "save this design to the vault" → vault even if local docs enabled
+- "create a plan in docs/" → local even without local docs config
+- "save to inbox" → always vault _inbox
+
+**Natural routing (no location specified):**
+- "create a design doc" + Local docs configured → local docs/
+- "create a design doc" + no Local docs → vault
+- "save this brainstorm" + Local docs configured → vault (exploratory)
+- "save this brainstorm" + no Local docs → vault
+
+### Location-Specific Conventions
+
+**Vault documents:**
+- Filename: `YYYY-MM-DD-descriptive-name.md` (lowercase, hyphens)
+- Frontmatter: Required (project, status, type, created)
+- Linking: Wikilinks `[[filename]]`
+- Updates: Add `updated: YYYY-MM-DD` to frontmatter
+
+**Local documents:**
+- Filename: Flexible (adapt to existing or use simple names like `architecture.md`)
+- Frontmatter: Optional (not required)
+- Linking: Relative markdown links `[text](./file.md)`
+- Updates: Rely on git history (no frontmatter dates)
+
 ## When to Use
 
 **User triggers:**
