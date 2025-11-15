@@ -301,14 +301,23 @@ created: YYYY-MM-DD      # File creation date
 
 **Trigger:** "save this as a new project"
 
+**Check for project linking:**
+- If CLAUDE.local.md exists with `Vault project:` → use that project name as suggestion
+- Otherwise → ask for project name
+
 1. Determine vault path from conversation context (see Configuration)
 2. Ask for project name → validate (lowercase, hyphens, no spaces)
 3. Create `<vault-path>/projects/<project-name>/`
 4. Infer doc type from conversation (brainstorming → brainstorm, planning → plan)
-5. Generate filename: `YYYY-MM-DD-<type>.md`
-6. Write frontmatter with `status: planning`
-7. Add empty `## Related Documents` section
-8. Confirm: "Created projects/<name>/YYYY-MM-DD-<type>.md"
+5. Apply location resolution:
+   - If Local docs configured AND type in [design, plan] → create in local docs
+   - Otherwise → create in vault projects/<name>/
+6. Generate filename:
+   - Vault: `YYYY-MM-DD-<type>.md`
+   - Local: adapt to style or use `<type>.md`
+7. Write frontmatter (vault only) with `status: planning`
+8. Add `## Related Documents` section
+9. Confirm: "Created projects/<name>/YYYY-MM-DD-<type>.md" or "Created docs/<type>.md"
 
 ### Save to Inbox
 
@@ -324,19 +333,21 @@ created: YYYY-MM-DD      # File creation date
 
 **Trigger:** "create a [design/plan] doc for [project-name]"
 
-1. Search `projects/` for matching folder (support partial matches)
-2. If not found → ask to clarify or create new project
-3. If multiple matches → present options
-4. Create new doc in project folder
-5. Search project for related docs → add wikilinks inline where relevant
-6. Add `## Related Documents` section with links + brief descriptions:
-   ```markdown
-   ## Related Documents
-
-   - [[YYYY-MM-DD-initial-brainstorm]] - Initial exploration
-   - [[YYYY-MM-DD-architecture]] - System design
-   ```
-7. Confirm creation + report links added
+1. Check for CLAUDE.local.md with matching project name
+2. If not found in config, search `projects/` for matching folder
+3. If not found → ask to clarify or create new project
+4. If multiple matches → present options
+5. Apply location resolution (see Location Resolution section):
+   - If Local docs configured AND type in [design, plan] → create in local docs
+   - Otherwise → create in vault project folder
+6. Create new doc in resolved location
+7. Search both vault and local for related docs
+8. Add inline wikilinks where relevant (vault) or markdown links (local)
+9. Add `## Related Documents` section with links:
+   - Vault docs: `[[YYYY-MM-DD-filename]]`
+   - Local docs: `[Title](./filename.md)`
+   - Cross-location: GitHub URL if detected
+10. Confirm creation + report links added
 
 ### Update Existing Document
 
@@ -371,33 +382,44 @@ created: YYYY-MM-DD      # File creation date
 
 1. Determine vault path from conversation context (see Configuration)
 2. Read `<vault-path>/projects/` (skip `_inbox/`)
-3. For each project, read one doc to get status
-4. Sort by status: active → planning → paused → completed → archived
-5. Show count of documents per project
+3. If CLAUDE.local.md configured, include linked project prominently
+4. For each project, read one doc to get status
+5. Sort by status: active → planning → paused → completed → archived
+6. Show count of documents per project
+7. If Local docs configured, show local doc count too
 
 **Output:**
 ```
 Active Projects:
-- obsidian-integration (3 documents)
+- obsidian-integration (3 vault docs, 2 local docs) [*linked]
 
 Planning:
-- another-project (1 document)
+- another-project (1 vault doc)
 ```
+
+[*linked] = configured in CLAUDE.local.md
 
 ### Show Project Contents
 
 **Trigger:** "what's in [project]" / "show me [project]"
 
-1. Find project folder
-2. List all documents with types and statuses from frontmatter
-3. Present chronologically
+1. Find project folder in vault
+2. If CLAUDE.local.md links this project, also scan local docs
+3. List all documents with types and statuses from frontmatter (vault)
+4. List all documents from local docs (if configured)
+5. Present by location, chronologically within each
 
 **Output:**
 ```
 obsidian-integration (status: active):
+
+Vault documents:
 - 2025-11-07-initial-brainstorm.md (brainstorm)
-- 2025-11-08-architecture-design.md (design)
-- 2025-11-10-implementation-plan.md (plan)
+- 2025-11-10-retrospective.md (retrospective)
+
+Local documents:
+- architecture.md (design)
+- implementation-plan.md (plan)
 ```
 
 ### Update Project Status
