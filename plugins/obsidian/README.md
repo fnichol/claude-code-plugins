@@ -4,11 +4,15 @@ Personal plugin for managing brainstorming and planning documents in an Obsidian
 
 ## Overview
 
-This plugin provides the `vault-management` skill for Claude Code to create and manage structured documentation in your Obsidian vault using direct file system access. No MCP servers or Obsidian plugins required.
+This plugin provides two skills for Claude Code to create and manage structured documentation in your Obsidian vault using direct file system access. No MCP servers or Obsidian plugins required.
+
+**Skills:**
+- **vault** - Core vault operations (creating projects, managing documents, frontmatter)
+- **project-linking** - Automatic session awareness linking working directories to vault projects
 
 **Architecture:**
 - **CLAUDE.md** - Minimal configuration (vault path, directory structure) loaded in every session
-- **SKILL.md** - Detailed operations and conventions loaded on-demand when managing vault
+- **Skills** - Detailed operations and conventions loaded on-demand when managing vault
 
 ## Features
 
@@ -39,7 +43,8 @@ This plugin provides the `vault-management` skill for Claude Code to create and 
 
 **What gets loaded:**
 - **CLAUDE.md**: Vault location and basic structure (loads in every conversation - kept minimal for token efficiency)
-- **vault-management skill**: Full operations, conventions, and validation rules (loads only when you use vault commands)
+- **vault skill**: Core vault operations, conventions, and validation rules (loads when creating/managing vault documents)
+- **project-linking skill**: Project awareness and dual-location routing (loads automatically when CLAUDE.local.md is present)
 
 **Why this approach:**
 - Plugin files stay generic and shareable
@@ -49,7 +54,7 @@ This plugin provides the `vault-management` skill for Claude Code to create and 
 
 ## Usage
 
-The `vault-management` skill activates automatically when you use trigger phrases OR when you start a session in a directory with `CLAUDE.local.md` containing an Obsidian project reference.
+The vault skills activate automatically when you use trigger phrases OR when you start a session in a directory with `CLAUDE.local.md` containing an Obsidian project reference.
 
 ### Project Linking (Automatic)
 
