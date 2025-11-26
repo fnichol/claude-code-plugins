@@ -11,6 +11,16 @@
       "source": "./plugins/obsidian",
       "description": "Obsidian vault integration for Claude Code",
       "version": "1.0.0"
+    },
+    {
+      "name": "superpowers",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/fnichol/superpowers.git"
+      },
+      "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques (fnichol's fork)",
+      "version": "3.5.1",
+      "strict": true
     }
   ]
 }
