@@ -19,7 +19,7 @@
         "url": "https://github.com/fnichol/superpowers.git"
       },
       "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques (fnichol's fork)",
-      "version": "3.5.1",
+      "version": "4.3.1",
       "strict": true
     }
   ]
