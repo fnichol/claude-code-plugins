@@ -10,7 +10,7 @@
       "name": "obsidian",
       "source": "./plugins/obsidian",
       "description": "Obsidian vault integration for Claude Code",
-      "version": "1.0.0"
+      "version": "2.0.0"
     },
     {
       "name": "superpowers",
