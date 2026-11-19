@@ -29,6 +29,10 @@ This plugin provides two skills for Claude Code to create and manage structured 
 ## Installation & Configuration
 
 1. Install this plugin via Claude Code plugin marketplace
+   ```sh
+   /plugin install obsidian --marketplace fnichol/claude-code-plugins
+
+   ```
 
 2. Add to your `~/.claude/CLAUDE.md`:
    ```markdown
